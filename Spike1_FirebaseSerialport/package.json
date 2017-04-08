@@ -10,6 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "firebase": "^3.7.5",
+    "firebase-admin": "^4.2.0",
     "serialport": "^4.0.7"
   }
 }
