@@ -50,58 +50,69 @@ function connectToArduino(arduinoCom) {
  
     // Let us know when the device is open
     port.on('open', function() {
-        console.log(" - Connection open. Awaiting firmata details.");
-    });
-     
-    // Deal with errors.
-    port.on('error', function(err) {
-        console.log('Error communicating with Arduino: ' + err.message + '. Exiting.');
-        process.exit(1);
-    })
-    
-    // These describe the firmata commands we will be receiving.
-    var commandDesc = {
-        /*StartByte: [Name, IsTerminatedBySpecificByte, MessageLengthOrTerminatorByte, Callback]*/
-        0xF9: ["ProtocolVersion", false, 2, onProtocolVersion],
-        0xF0: ["Sysex", true, 0xF7, onSysex],
-        0x90: ["DigitalIOMessage", false, 2, onDigitalPortData],
-    }
-    
-    // Deal with incoming Firmata messages.
-    var dataSoFar = new Buffer(0);
-    port.on('data', function(data) {
-    try {
-        // While there is data to deal with...
-        while (data !== null && data.length > 0) {
-            // Add the message onto the buffer.
-            dataSoFar = Buffer.concat([dataSoFar, data]);
-            
-            // Get the message descriptor from its first byte.
-            var desc = commandDesc[dataSoFar[0]];
-            if (desc == undefined) {
-                // Unknown message!
-                console.log("The data the device is reporting is not valid " +
-                            "firmata data! Please restart the program and " +
-                            "also insure that Firamata is correctly " + 
-                            "installed. Got: " + c + ". Exiting.");
+        // NOTE: Something seems to be buffering the serial input even when
+        // the port is not open. So we're gonna flush all that data away. It's
+        // a hack to do this in this way, but hope that in this small time
+        // span, no important data is sent to us.
+        port.flush(function() {
+            console.log(" - Connection open. Awaiting firmata details.");
+
+            // Deal with errors.
+            port.on('error', function(err) {
+                console.log('Error communicating with Arduino: ' + err.message + '. Exiting.');
                 process.exit(1);
+            })
+            
+            // These describe the firmata commands we will be receiving.
+            var commandDesc = {
+                /*StartByte: [Name, IsTerminatedBySpecificByte, MessageLengthOrTerminatorByte, Callback]*/
+                0xF9: ["ProtocolVersion", false, 2, onProtocolVersion],
+                0xF0: ["Sysex", true, 0xF7, onSysex],
+                0x90: ["DigitalIOMessage", false, 2, onDigitalPortData],
             }
             
-            // Are we done yet?
-            var cut = desc[1] ? dataSoFar.indexOf(desc[2]) : desc[2];
-            if (cut < 0 || cut > dataSoFar.length) {
-                break;
-            }
-            cut++;
-            
-            // Callback and repeat loop.
-            desc[3](dataSoFar.slice(0, cut), port);
-            data = dataSoFar.slice(cut);
-            dataSoFar = new Buffer(0);
-        }
-        } catch(e) {
-        console.log(e);
-        }
+            // Deal with incoming Firmata messages.
+            var dataSoFar = new Buffer(0);
+            port.on('data', function(data) {
+                try {
+                    // While there is data to deal with...
+                    while (data !== null && data.length > 0) {
+                        // Add the message onto the buffer.
+                        dataSoFar = Buffer.concat([dataSoFar, data]);
+
+                        // Get the message descriptor from its first byte.
+                        var desc = commandDesc[dataSoFar[0]];
+                        if (desc == undefined) {
+                            var bytes = ""
+                            for (var i = 0; i < dataSoFar.length; i++) {
+                                bytes += " " + dataSoFar[i]
+                            }
+
+                            // Unknown message!
+                            console.log("The data the device is reporting is not valid " +
+                                        "firmata data! Please restart the program and " +
+                                        "also insure that Firamata is correctly " +
+                                        "installed. Got: " + bytes + ". Exiting.");
+                            process.exit(1);
+                        }
+
+                        // Are we done yet?
+                        var cut = desc[1] ? dataSoFar.indexOf(desc[2]) : desc[2];
+                        if (cut < 0 || cut >= dataSoFar.length) {
+                            break;
+                        }
+                        cut++;
+
+                        // Callback and repeat loop.
+                        desc[3](dataSoFar.slice(0, cut), port);
+                        data = dataSoFar.slice(cut);
+                        dataSoFar = new Buffer(0);
+                    }
+                } catch(e) {
+                    console.log(e);
+                }
+            });
+        });
     });
 }
 
