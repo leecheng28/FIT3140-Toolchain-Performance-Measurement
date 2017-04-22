@@ -1,0 +1,17 @@
+{
+  "name": "fit3140-assignment3-spike2",
+  "version": "1.0.0",
+  "description": "Tests firebase and johnny-five libraries together",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Li Cheng",
+  "license": "ISC",
+  "dependencies": {
+    "firebase": "^3.7.5",
+    "firebase-admin": "^4.2.0",
+    "johnny-five": "^0.10.6"
+  }
+}
