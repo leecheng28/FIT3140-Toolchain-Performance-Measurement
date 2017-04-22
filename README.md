@@ -28,6 +28,6 @@ node client.js
 
 ## Who do I talk to? ##
 
-* Matthew at 'mgrea2@student.monash.edu'
+* Matthew at `mgrea2@student.monash.edu`
 
 * Li at `lche206@student.monash.edu`
