@@ -6,8 +6,6 @@
  * 1) Server reads and prints data from motion sensor, with timestamp on the console;
  * 2) Server sends data to firebase database;
  *
- * Reference: ;
- *
  * @author Li Cheng
  */
 
