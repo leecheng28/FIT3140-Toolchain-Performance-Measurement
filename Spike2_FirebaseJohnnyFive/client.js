@@ -6,10 +6,9 @@
  * 1) Client reads data from firebase datbase; 
  * 2) Client calculates response time;
  *
- * Reference: ;
- *
  * @author Li Cheng
  */
+
  var firebase = require('firebase');
  var publicFirebaseConfig = require('./publicFirebaseConfig.js');
 firebase.initializeApp(publicFirebaseConfig);
