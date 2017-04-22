@@ -30,7 +30,7 @@ var board = new five.Board();
 var time = Date.now();
 
 board.on("ready", function() {
-	var motion = new five.Motion(7);
+	var motion = new five.Motion(2);
 
 	motion.on("calibrated", function() {
     	console.log("calibrated");
