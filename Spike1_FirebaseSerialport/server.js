@@ -1,4 +1,5 @@
 var admin = require("firebase-admin");
+var moment = require("moment");
 var SerialPort = require('serialport');
 
 // Connect to firebase.
@@ -118,7 +119,7 @@ function connectToArduino(arduinoCom) {
 
 function onMotionEvent(isMotion) {
     var time = Date.now();
-    console.log("Motion is now " + (isMotion ? "ON" : "OFF") + " at time " + time + ". Pushing to Firebase.");
+    console.log("Motion is now " + (isMotion ? "ON" : "OFF") + " at time " + moment(time).format('MMMM Do YYYY, h:mm:ss a [(+]SSS[ms)]') + ". Pushing to Firebase.");
     spikeRef.push({
        time: time,
        isMotion: isMotion, 

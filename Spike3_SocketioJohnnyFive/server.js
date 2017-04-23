@@ -13,6 +13,7 @@
 var app = require('express')();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
+var moment = require("moment");
 
 var five = require('johnny-five');
 var socketNames = require('./lib/socket-names.js');
@@ -60,7 +61,7 @@ board.on("ready", function() {
 
 	// Whenever there is a state change in "detectedMotion" variable, log a message in console.
 	motion.on("change", function(data) {
-		console.log("Motion is now " + (data.detectedMotion ? "ON" : "OFF") + " at time " + data.timestamp + ".	");
+        console.log("Motion is now " + (data.detectedMotion ? "ON" : "OFF") + " at time " + moment(data.timestamp).format('MMMM Do YYYY, h:mm:ss a [(+]SSS[ms)]') + ". Pushing to Firebase.");
 
 		// update server state variables
 		state[socketNames.SOCVAR_MOTION] = data.detectedMotion;

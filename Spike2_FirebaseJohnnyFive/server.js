@@ -12,6 +12,7 @@
 // Import libraries
 var admin = require('firebase-admin');
 var five = require('johnny-five');
+var moment = require("moment");
 
 // Connect to firebase
 admin.initializeApp({
@@ -39,7 +40,7 @@ board.on("ready", function() {
 	// whenever there is a state change in "detectedMotion" variable
 	motion.on("change", function(data) {
 	var isMotion = null;
-		console.log("Motion is now " + (data.detectedMotion ? "ON" : "OFF") + " at time " + data.timestamp + ". Pushing to Firebase.");
+        console.log("Motion is now " + (data.detectedMotion ? "ON" : "OFF") + " at time " + moment(data.timestamp).format('MMMM Do YYYY, h:mm:ss a [(+]SSS[ms)]') + ". Pushing to Firebase.");
 		spikeRef.push({
 			time: data.timestamp,
 			isMotion: data.detectedMotion,
