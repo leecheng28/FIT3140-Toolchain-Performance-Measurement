@@ -1,0 +1,20 @@
+{
+  "name": "fit3140-assignment3-spike3",
+  "version": "1.0.0",
+  "description": "Tests socket.io and johnny-five libraries together",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "author": "Li Cheng and Matthew Ready",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.15.2",
+    "firebase": "^3.7.5",
+    "firebase-admin": "^4.2.0",
+    "johnny-five": "^0.10.10",
+    "socket.io": "^1.7.3",
+    "socket.io-client": "^1.7.3"
+  }
+}

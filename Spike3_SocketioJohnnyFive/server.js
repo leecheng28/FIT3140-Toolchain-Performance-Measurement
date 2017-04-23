@@ -43,7 +43,7 @@ function emitStateOnSocket(socket) {
  * Sends the current server state to all connected browsers.
  */
 function emitStateOnAllSockets() {
-    emitStateOnSocket(socketServer.sockets);
+    emitStateOnSocket(io.sockets);
 }
 
 // 
@@ -65,12 +65,7 @@ board.on("ready", function() {
 		// update server state variables
 		state[socketNames.SOCVAR_MOTION] = data.detectedMotion;
 		state[socketNames.SOCVAR_TIME] = data.timestamp;
-
-		io.on('connection', function(socket) {
-			
-			socket.emit(socketNames.SOCEVENT_SERVER_SETS_STATE, state);
-		});
-		
+		emitStateOnAllSockets();
 	});
 });
 
