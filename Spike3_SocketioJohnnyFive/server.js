@@ -6,7 +6,7 @@
  * 1) Server reads and prints data from motion sensor, with timestamp on the console;
  * 2) Server sends data to client via socketio;
  *
- * @author Li Cheng
+ * @author Li Cheng, Matthew Ready
  */
 
 // Import libraries
@@ -18,7 +18,7 @@ var five = require('johnny-five');
 var socketNames = require('./lib/socket-names.js');
 var EventEmitter = require('events').EventEmitter;
 
-var emitter = new EventEmitter();
+// Increase Event Emitter limit manaully, to prevent wanrning of potential memory leak.
 require('events').EventEmitter.prototype._maxListeners = 100;
 
 // Setup a basic server state. This is intended to be synchronized between the
@@ -40,13 +40,13 @@ function emitStateOnSocket(socket) {
 }
 
 /**
- * Sends the current server state to all connected browsers.
+ * Sends the current server state to all connected clients.
  */
 function emitStateOnAllSockets() {
     emitStateOnSocket(io.sockets);
 }
 
-// 
+// Server listens on local host, port 8000
 server.listen(8000);
 
 // Create a Johnny-five board object to communicate with arduino
@@ -58,13 +58,15 @@ board.on("ready", function() {
     	console.log("calibrated");
 	});
 
-	// whenever there is a state change in "detectedMotion" variable
+	// Whenever there is a state change in "detectedMotion" variable, log a message in console.
 	motion.on("change", function(data) {
 		console.log("Motion is now " + (data.detectedMotion ? "ON" : "OFF") + " at time " + data.timestamp + ".	");
 
 		// update server state variables
 		state[socketNames.SOCVAR_MOTION] = data.detectedMotion;
 		state[socketNames.SOCVAR_TIME] = data.timestamp;
+
+		// Send to all connected clients
 		emitStateOnAllSockets();
 	});
 });
