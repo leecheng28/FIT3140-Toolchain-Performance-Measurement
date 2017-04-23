@@ -1,7 +1,7 @@
 # FIT3140 Assignment 3. Team 29.
 
 ## Project Description ##
-Using multiple technologies to investigate client-server real-time bi-directional communication and interact with IoT devices.
+We need to decide on the toolchains suitable for implementing "Morse Code Decoder" - assignment 4 and 5. This project compares performance between different toolchains, with an emphasis on response time where the time between server sends the data and the time client receives the data is measured.
 
 ## Hardware Structure ##
 ![Hardware Structure](https://github.com/FIT3140-S1-2017/assignment-3-team29/blob/master/Arduino-motion-sensor-circuit.png)
