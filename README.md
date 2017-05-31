@@ -29,7 +29,6 @@ On the second terminal window, type the following to run the client-side program
 node client.js
 ```
 
-## Who do I talk to? ##
-
-* Matthew at `mgrea2@student.monash.edu`
-* Li at `lche206@student.monash.edu`
+# Who do I talk to? #
+Further issues, please contact
+* Li at `cl745524836ATgmail.com`
